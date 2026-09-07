@@ -1,30 +1,27 @@
 /* =========================================================
-   SCRIPT PRINCIPAL — !Anas Profile Page
+   SCRIPT PRINCIPAL — !Anas Profile Page (HUD noir & blanc)
    ========================================================= */
 
 /* ---------------------------------------------------------
-   ⚙️ CONFIGURATION — à personnaliser
+   CONFIGURATION — à personnaliser
    --------------------------------------------------------- */
 const CONFIG = {
-  // Ton ID Discord (clic droit sur ton profil > Copier l'ID, mode développeur activé).
-  // Pour que le statut fonctionne, tu dois AUSSI avoir rejoint le serveur Lanyard :
-  // https://discord.gg/lanyard  (sinon l'API ne peut pas te suivre)
+  // Ton ID Discord (mode développeur activé > clic droit sur ton profil > Copier l'ID).
+  // Nécessite aussi d'avoir rejoint le serveur Lanyard : https://discord.gg/lanyard
   discordId: "TON_ID_DISCORD",
 
-  // Lien Discord utilisé pour le bouton "copier"
   discordInvite: "https://discord.gg/MONLIEN",
 
-  // Phrases affichées en effet machine à écrire
   typewriterPhrases: [
-    "En train de coder...",
-    "Disponible pour discuter",
-    "Développeur passionné",
-    "Toujours en train d'apprendre",
+    "EN TRAIN DE CODER...",
+    "DISPONIBLE",
+    "DEVELOPPEUR",
+    "TOUJOURS EN APPRENTISSAGE",
   ],
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  initThemeSwitcher();
+  initThemeToggle();
   initSoundToggle();
   initVisitorCounter();
   initCopyDiscord();
@@ -38,29 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =========================================================
-   1) SYSTEME DE THEMES (Dark / Blue / Purple)
+   1) TOGGLE D'INVERSION (noir sur blanc / blanc sur noir)
    ========================================================= */
-function initThemeSwitcher() {
-  const dots = document.querySelectorAll('.theme-dot');
-  const savedTheme = localStorage.getItem('site-theme') || 'dark';
+function initThemeToggle() {
+  const btn = document.getElementById('invert-toggle');
+  const saved = localStorage.getItem('site-theme') || 'dark';
 
-  applyTheme(savedTheme);
+  applyTheme(saved);
 
-  dots.forEach((dot) => {
-    dot.addEventListener('click', () => {
-      const theme = dot.dataset.theme;
-      applyTheme(theme);
-      localStorage.setItem('site-theme', theme);
-    });
+  btn.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    const next = current === 'light' ? 'dark' : 'light';
+    applyTheme(next);
+    localStorage.setItem('site-theme', next);
   });
 
   function applyTheme(theme) {
-    if (theme === 'dark') {
-      document.documentElement.removeAttribute('data-theme');
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
     } else {
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.removeAttribute('data-theme');
     }
-    dots.forEach((d) => d.classList.toggle('active', d.dataset.theme === theme));
   }
 }
 
@@ -77,11 +72,8 @@ function initSoundToggle() {
 
   soundBtn.addEventListener('click', () => {
     soundOn = !soundOn;
-
-    // La vidéo de fond peut être démutée si elle a une piste audio
     video.muted = !soundOn;
 
-    // Si le son global est coupé, on met la musique en pause
     if (!soundOn) {
       audio.pause();
       updatePlayIcon(false);
@@ -93,9 +85,7 @@ function initSoundToggle() {
 }
 
 /* =========================================================
-   3) COMPTEUR DE VISITEURS GLOBAL (CountAPI, gratuit, sans clé)
-   Chaque visite (tous visiteurs confondus) incrémente un compteur
-   partagé, stocké côté API et identifié par le nom de domaine.
+   3) COMPTEUR DE VISITEURS GLOBAL (CountAPI)
    ========================================================= */
 async function initVisitorCounter() {
   const countEl = document.getElementById('visitor-count');
@@ -103,13 +93,11 @@ async function initVisitorCounter() {
   const key = 'visitors';
 
   try {
-    // "hit" incrémente et retourne le nouveau total en une seule requête
     const res = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
     if (!res.ok) throw new Error('CountAPI indisponible');
     const data = await res.json();
     animateCount(countEl, data.value);
   } catch (err) {
-    // Solution de secours locale si l'API est injoignable (ex: hors-ligne)
     let count = parseInt(localStorage.getItem('visitor-count-fallback') || '0', 10);
     count += 1;
     localStorage.setItem('visitor-count-fallback', count);
@@ -140,18 +128,18 @@ function initCopyDiscord() {
   copyBtn.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(CONFIG.discordInvite);
-      showToast('Lien Discord copié !');
+      showToast('LIEN DISCORD COPIÉ');
       copyBtn.classList.add('copied');
       const span = copyBtn.querySelector('span');
       const originalText = span.textContent;
-      span.textContent = 'Copié !';
+      span.textContent = 'COPIÉ';
 
       setTimeout(() => {
         copyBtn.classList.remove('copied');
         span.textContent = originalText;
       }, 2000);
     } catch (err) {
-      showToast("Impossible de copier le lien.");
+      showToast('ÉCHEC DE LA COPIE');
     }
   });
 
@@ -163,7 +151,7 @@ function initCopyDiscord() {
 }
 
 /* =========================================================
-   5) LECTEUR DE MUSIQUE INTEGRE
+   5) LECTEUR DE MUSIQUE
    ========================================================= */
 function initMusicPlayer() {
   const audio = document.getElementById('audio');
@@ -175,9 +163,7 @@ function initMusicPlayer() {
 
   playBtn.addEventListener('click', () => {
     if (audio.paused) {
-      audio.play().catch(() => {
-        // Lecture bloquée par le navigateur tant qu'il n'y a pas d'interaction
-      });
+      audio.play().catch(() => {});
       updatePlayIcon(true);
     } else {
       audio.pause();
@@ -203,7 +189,7 @@ function updatePlayIcon(isPlaying) {
 }
 
 /* =========================================================
-   6) PARTICULES ANIMEES EN ARRIERE-PLAN (Canvas)
+   6) PARTICULES (Canvas) — points blancs/noirs uniquement
    ========================================================= */
 function initParticles() {
   const canvas = document.getElementById('particles');
@@ -211,26 +197,30 @@ function initParticles() {
   let particles = [];
   let width, height;
 
+  function isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+
   function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   }
 
   function createParticles() {
-    const count = Math.floor((width * height) / 18000); // densité adaptative
+    const count = Math.floor((width * height) / 18000);
     particles = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: Math.random() * 2 + 0.5,
-      dx: (Math.random() - 0.5) * 0.4,
-      dy: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.5 + 0.2,
+      r: Math.random() * 1.6 + 0.4,
+      dx: (Math.random() - 0.5) * 0.35,
+      dy: (Math.random() - 0.5) * 0.35,
+      alpha: Math.random() * 0.5 + 0.15,
     }));
   }
 
   function draw() {
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.fillStyle = isLight() ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)';
 
     particles.forEach((p) => {
       ctx.beginPath();
@@ -260,7 +250,7 @@ function initParticles() {
 }
 
 /* =========================================================
-   7) EFFET TYPEWRITER (machine à écrire) sur le statut
+   7) EFFET TYPEWRITER
    ========================================================= */
 function initTypewriter() {
   const el = document.getElementById('typewriter');
@@ -280,7 +270,7 @@ function initTypewriter() {
 
       if (charIndex === current.length) {
         deleting = true;
-        setTimeout(tick, 1800); // pause avant d'effacer
+        setTimeout(tick, 1800);
         return;
       }
     } else {
@@ -301,31 +291,27 @@ function initTypewriter() {
 
 /* =========================================================
    8) STATUT DISCORD EN DIRECT (Lanyard API)
-   Nécessite d'avoir rejoint https://discord.gg/lanyard
-   et d'avoir renseigné CONFIG.discordId ci-dessus.
+   Représenté par la FORME de la bordure, jamais par une couleur :
+   plein = en ligne / tirets = absent / double = ne pas déranger / fine = hors ligne
    ========================================================= */
 function initDiscordStatus() {
   const dot = document.getElementById('discord-status-dot');
+  const avatarDot = document.getElementById('status-dot');
   const text = document.getElementById('discord-status-text');
   if (!dot || !text) return;
 
   if (!CONFIG.discordId || CONFIG.discordId === 'TON_ID_DISCORD') {
-    text.textContent = 'Statut Discord non configuré';
+    text.textContent = 'STATUT DISCORD NON CONFIGURÉ';
+    setStatusClass(dot, 'offline');
+    setStatusClass(avatarDot, 'offline');
     return;
   }
 
-  const statusColors = {
-    online: 'var(--success)',
-    idle: 'var(--warning)',
-    dnd: 'var(--danger)',
-    offline: 'var(--offline)',
-  };
-
   const statusLabels = {
-    online: 'En ligne sur Discord',
-    idle: 'Absent',
-    dnd: 'Ne pas déranger',
-    offline: 'Hors ligne',
+    online: 'EN LIGNE SUR DISCORD',
+    idle: 'ABSENT',
+    dnd: 'NE PAS DÉRANGER',
+    offline: 'HORS LIGNE',
   };
 
   async function fetchStatus() {
@@ -337,36 +323,38 @@ function initDiscordStatus() {
       const data = json.data;
       const status = data.discord_status || 'offline';
 
-      dot.style.background = statusColors[status] || statusColors.offline;
-      // On synchronise aussi le petit point sur l'avatar
-      const avatarDot = document.getElementById('status-dot');
-      if (avatarDot) avatarDot.style.background = statusColors[status] || statusColors.offline;
+      setStatusClass(dot, status);
+      setStatusClass(avatarDot, status);
 
-      // Priorité d'affichage : statut personnalisé > jeu en cours > statut général
       const customStatus = (data.activities || []).find((a) => a.type === 4);
       const playing = (data.activities || []).find((a) => a.type === 0);
 
       if (customStatus && customStatus.state) {
-        text.textContent = customStatus.state;
+        text.textContent = customStatus.state.toUpperCase();
       } else if (playing) {
-        text.textContent = `Joue à ${playing.name}`;
+        text.textContent = `JOUE À ${playing.name.toUpperCase()}`;
       } else {
         text.textContent = statusLabels[status] || statusLabels.offline;
       }
     } catch (err) {
-      text.textContent = 'Statut Discord indisponible';
-      dot.style.background = statusColors.offline;
+      text.textContent = 'STATUT DISCORD INDISPONIBLE';
+      setStatusClass(dot, 'offline');
+      setStatusClass(avatarDot, 'offline');
     }
   }
 
   fetchStatus();
-  // Rafraîchit toutes les 30 secondes
   setInterval(fetchStatus, 30000);
 }
 
+function setStatusClass(el, status) {
+  if (!el) return;
+  el.classList.remove('dot-online', 'dot-idle', 'dot-dnd', 'dot-offline');
+  el.classList.add(`dot-${status}`);
+}
+
 /* =========================================================
-   9) NAVIGATION MULTI-PAGES ("mode présentation")
-   Accueil / Projets / Contact avec transition fluide
+   9) NAVIGATION MULTI-PAGES
    ========================================================= */
 function initPageNavigation() {
   const tabs = document.querySelectorAll('.nav-tab');
@@ -389,14 +377,12 @@ function initPageNavigation() {
     tab.addEventListener('click', () => goToPage(tab.dataset.page));
   });
 
-  // Menu burger (mobile)
   if (burgerBtn) {
     burgerBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('open');
     });
   }
 
-  // Navigation directe via l'URL (#projets, #contact...)
   const initialPage = window.location.hash.replace('#', '') || 'accueil';
   if (['accueil', 'projets', 'contact'].includes(initialPage)) {
     goToPage(initialPage);
@@ -404,7 +390,7 @@ function initPageNavigation() {
 }
 
 /* =========================================================
-   10) FORMULAIRE DE CONTACT (ouvre le client mail, sans backend)
+   10) FORMULAIRE DE CONTACT (mailto, sans backend)
    ========================================================= */
 function initContactForm() {
   const form = document.getElementById('contact-form');
