@@ -11,7 +11,7 @@ const CONFIG = {
   // Ton ID Discord
   discordId: "664188939812208690",
 
-  discordInvite: "https://discord.gg/MONLIEN",
+  discordInvite: "https://discord.gg/tPEV8GdfSn",
 
   typewriterPhrases: [
     "EN TRAIN DE CODER...",
@@ -58,14 +58,12 @@ function initIntroScreen() {
 
   intro.addEventListener('click', () => {
 
-    // Démarre la musique au clic sur CLICK TO ENTER
-    // Cela permet au navigateur d'autoriser la lecture audio.
-    const audio = document.getElementById('audio');
-
-    
-
     intro.classList.add('intro-hidden');
     document.body.classList.remove('intro-locked');
+
+    // Prévient initSoundToggle que ce clic est le "vrai" geste utilisateur
+    // qui autorise le navigateur à lancer le son.
+    document.dispatchEvent(new Event('site:unlock-sound'));
 
     setTimeout(() => intro.remove(), 700);
 
@@ -120,6 +118,12 @@ function initSoundToggle() {
 
 
   updateIcon();
+
+  // Dès que l'écran d'intro confirme le premier vrai geste utilisateur
+  // (clic sur "CLICK TO ENTER"), on lance réellement l'audio.
+  document.addEventListener('site:unlock-sound', () => {
+    if (soundOn) applySoundState();
+  }, { once: true });
 
 
   // Bouton pour couper / remettre le son

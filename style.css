@@ -56,7 +56,7 @@
   font-size: clamp(2.6rem, 8vw, 5.5rem);
   font-weight: 900;
   letter-spacing: 6px;
-  color: #000000;
+  color: #ffffff;
   text-shadow: 0 0 40px rgba(255, 255, 255, 0.25);
 }
 
@@ -156,30 +156,12 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   transform: translate(-50%, -50%);
   object-fit: cover;
   z-index: -4;
-  filter: grayscale(2) contrast(1.15) blur(0px) brightness(2);
-}
-
-/* Grille HUD subtile, animée en fond */
-.grid-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: -3;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 42px 42px;
-  animation: gridPan 30s linear infinite;
-}
-
-@keyframes gridPan {
-  from { background-position: 0 0; }
-  to { background-position: 42px 42px; }
 }
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.65) 100%);
   z-index: -2;
 }
 
