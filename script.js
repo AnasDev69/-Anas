@@ -43,35 +43,40 @@ function initSoundToggle() {
   const audio = document.getElementById('audio');
   const icon = soundBtn.querySelector('i');
 
+  // État VOULU par l'utilisateur (activé par défaut). Ne représente pas si le
+  // son joue réellement à cet instant, seulement l'intention — c'est ce qui
+  // permet au déblocage à la première interaction de fonctionner correctement.
   let soundOn = true;
+  audio.volume = 0.5;
 
-  function setIcon() {
+  function updateIcon() {
     icon.classList.toggle('fa-volume-xmark', !soundOn);
     icon.classList.toggle('fa-volume-high', soundOn);
   }
 
-  // Tentative de lancement du son dès l'ouverture du site.
-  // NB : la plupart des navigateurs bloquent l'autoplay avec son tant que
-  // l'utilisateur n'a pas encore interagi avec la page (clic, touche...).
-  // Si ça échoue, on repasse en "coupé" et le bouton relance le son normalement.
-  video.muted = false;
-  audio.volume = 0.5;
-  const playPromise = audio.play();
-  if (playPromise) {
-    playPromise.catch(() => {
-      soundOn = false;
+  function applySoundState() {
+    if (soundOn) {
+      video.muted = false;
+      audio.play().catch(() => {
+        // Bloqué par le navigateur (pas encore d'interaction) : on retentera
+        // à la première interaction via le filet de sécurité ci-dessous.
+      });
+    } else {
       video.muted = true;
-      setIcon();
-    });
+      audio.pause();
+    }
   }
-  setIcon();
+
+  updateIcon();
+  applySoundState(); // tentative directe dès le chargement de la page
 
   // Filet de sécurité : les navigateurs bloquent le son tant qu'il n'y a pas
   // eu d'interaction sur la page. On écoute donc la toute première interaction,
   // peu importe sa nature, pour relancer le son automatiquement à ce moment-là.
   function unlockOnFirstInteraction() {
-    if (!soundOn) return;
-    audio.play().catch(() => {});
+    if (soundOn && audio.paused) {
+      applySoundState();
+    }
   }
   const unlockEvents = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
   unlockEvents.forEach((evt) => {
@@ -81,15 +86,8 @@ function initSoundToggle() {
   soundBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     soundOn = !soundOn;
-    video.muted = !soundOn;
-
-    if (soundOn) {
-      audio.play().catch(() => {});
-    } else {
-      audio.pause();
-    }
-
-    setIcon();
+    applySoundState();
+    updateIcon();
   });
 }
 
