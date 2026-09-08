@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>!ANAS // DEVELOPER</title>
+  <title>!Anas</title>
+  <link rel="icon" type="image/png" href="icon.png">
   <meta name="description" content="Page profil de !Anas — Developer basé à Lyon, France." />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -26,38 +27,22 @@
   <nav class="navbar">
     <div class="nav-left">
       <span class="bracket">[</span>
-      <span class="logo-text">!ANAS_DEV</span>
+      <span class="logo-text">!ANAS</span>
       <span class="bracket">]</span>
     </div>
 
     <div class="nav-tabs" role="tablist">
       <button class="nav-tab active" data-page="accueil">ACCUEIL</button>
       <span class="nav-sep">/</span>
-      <button class="nav-tab" data-page="projets">PROJETS</button>
-      <span class="nav-sep">/</span>
       <button class="nav-tab" data-page="contact">CONTACT</button>
     </div>
 
     <div class="nav-right">
-      <button id="invert-toggle" class="icon-btn" title="Inverser le thème">
-        <i class="fa-solid fa-circle-half-stroke"></i>
-      </button>
-
       <button id="sound-toggle" class="icon-btn" title="Activer / couper le son">
-        <i class="fa-solid fa-volume-xmark"></i>
-      </button>
-
-      <button id="burger-btn" class="icon-btn burger-btn" title="Menu">
-        <i class="fa-solid fa-bars"></i>
+        <i class="fa-solid fa-volume-high"></i>
       </button>
     </div>
   </nav>
-
-  <div id="mobile-menu" class="mobile-menu">
-    <button class="nav-tab" data-page="accueil">ACCUEIL</button>
-    <button class="nav-tab" data-page="projets">PROJETS</button>
-    <button class="nav-tab" data-page="contact">CONTACT</button>
-  </div>
 
   <!-- ============ CONTENU PRINCIPAL ============ -->
   <main class="main-content">
@@ -71,12 +56,8 @@
         <span class="corner corner-bl"></span>
         <span class="corner corner-br"></span>
 
-        <!-- Avatar façon réticule HUD -->
+        <!-- Avatar -->
         <div class="avatar-wrapper">
-          <span class="reticle reticle-tl"></span>
-          <span class="reticle reticle-tr"></span>
-          <span class="reticle reticle-bl"></span>
-          <span class="reticle reticle-br"></span>
           <img src="avatar.jpg" alt="Avatar de !Anas" class="avatar" />
           <span class="status-dot" id="status-dot"></span>
         </div>
@@ -84,7 +65,7 @@
         <!-- Nom + badge -->
         <div class="identity">
           <h1 class="username" data-text="!ANAS">!ANAS</h1>
-          <span class="badge">DEVELOPER</span>
+          <span class="badge">DEV</span>
         </div>
 
         <p class="typewriter-line">
@@ -106,114 +87,22 @@
           <span>VISITEURS : <strong id="visitor-count">0</strong></span>
         </div>
 
-        <a href="https://discord.gg/MONLIEN" target="_blank" rel="noopener noreferrer" class="main-btn">
+        <a href="https://discord.gg/tPEV8GdfSn" target="_blank" rel="noopener noreferrer" class="main-btn">
           <i class="fa-brands fa-discord"></i>
           REJOINDRE LE DISCORD
         </a>
 
-        <button id="copy-discord" class="ghost-btn">
-          <i class="fa-regular fa-copy"></i>
-          <span>COPIER LE LIEN DISCORD</span>
-        </button>
-
         <div class="socials">
-          <a href="https://discord.gg/MONLIEN" target="_blank" rel="noopener noreferrer" class="social-icon" title="Discord">
+          <a href="https://discord.com/users/664188939812208690" target="_blank" rel="noopener noreferrer" class="social-icon" title="Mon profil Discord">
             <i class="fa-brands fa-discord"></i>
           </a>
-          <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
+          <a href="https://github.com/AnasDev69" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
             <i class="fa-brands fa-github"></i>
           </a>
-          <a href="https://t.me/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="social-icon" title="Telegram">
-            <i class="fa-brands fa-telegram"></i>
-          </a>
-          <a href="https://instagram.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram">
-            <i class="fa-brands fa-instagram"></i>
-          </a>
-          <a href="https://tiktok.com/@TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="social-icon" title="TikTok">
-            <i class="fa-brands fa-tiktok"></i>
-          </a>
-          <a href="https://x.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="social-icon" title="X (Twitter)">
-            <i class="fa-brands fa-x-twitter"></i>
-          </a>
         </div>
 
-        <div class="music-player">
-          <audio id="audio" src="music.mp3" loop preload="metadata"></audio>
+        <audio id="audio" src="music.mp3" loop preload="metadata"></audio>
 
-          <button id="play-btn" class="play-btn" title="Lecture / Pause">
-            <i class="fa-solid fa-play"></i>
-          </button>
-
-          <div class="music-info">
-            <div class="track-title">MUSIQUE DE FOND</div>
-            <div class="progress-bar">
-              <div id="progress" class="progress"></div>
-            </div>
-          </div>
-
-          <div class="volume-control">
-            <i class="fa-solid fa-volume-low"></i>
-            <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5" />
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ===================== PAGE PROJETS ===================== -->
-    <section class="page" id="page-projets">
-      <div class="page-card fade-in">
-        <span class="corner corner-tl"></span>
-        <span class="corner corner-tr"></span>
-        <span class="corner corner-bl"></span>
-        <span class="corner corner-br"></span>
-
-        <h2 class="page-title">// PROJETS</h2>
-        <p class="page-subtitle">Quelques réalisations récentes. Modifie ces cartes dans index.html.</p>
-
-        <div class="projects-grid">
-
-          <article class="project-card">
-            <div class="project-icon"><i class="fa-solid fa-robot"></i></div>
-            <h3>NOM DU PROJET 1</h3>
-            <p>Courte description du projet : ce qu'il fait, les technologies utilisées, le résultat obtenu.</p>
-            <div class="project-tags">
-              <span class="tag">JAVASCRIPT</span>
-              <span class="tag">NODE.JS</span>
-            </div>
-            <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="project-link">
-              VOIR SUR GITHUB <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-          </article>
-
-          <article class="project-card">
-            <div class="project-icon"><i class="fa-solid fa-globe"></i></div>
-            <h3>NOM DU PROJET 2</h3>
-            <p>Courte description du projet : ce qu'il fait, les technologies utilisées, le résultat obtenu.</p>
-            <div class="project-tags">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS</span>
-              <span class="tag">API</span>
-            </div>
-            <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="project-link">
-              VOIR SUR GITHUB <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-          </article>
-
-          <article class="project-card">
-            <div class="project-icon"><i class="fa-solid fa-server"></i></div>
-            <h3>NOM DU PROJET 3</h3>
-            <p>Courte description du projet : ce qu'il fait, les technologies utilisées, le résultat obtenu.</p>
-            <div class="project-tags">
-              <span class="tag">DISCORD.JS</span>
-              <span class="tag">BOT</span>
-            </div>
-            <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer" class="project-link">
-              VOIR SUR GITHUB <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
-          </article>
-
-        </div>
       </div>
     </section>
 
@@ -226,30 +115,26 @@
         <span class="corner corner-br"></span>
 
         <h2 class="page-title">// CONTACT</h2>
-        <p class="page-subtitle">Le plus rapide reste Discord, mais tu peux aussi m'écrire directement.</p>
+        <p class="page-subtitle">Le plus rapide reste Discord, mais tu peux aussi m'écrire directement via le formulaire.</p>
 
         <div class="contact-options">
-          <a href="mailto:ton.email@example.com" class="contact-btn">
-            <i class="fa-solid fa-envelope"></i> TON.EMAIL@EXAMPLE.COM
-          </a>
-          <a href="https://discord.gg/MONLIEN" target="_blank" rel="noopener noreferrer" class="contact-btn">
+          <a href="https://discord.gg/tPEV8GdfSn" target="_blank" rel="noopener noreferrer" class="contact-btn">
             <i class="fa-brands fa-discord"></i> REJOINDRE LE DISCORD
           </a>
         </div>
 
         <form id="contact-form" class="contact-form">
-          <label for="cf-name">NOM</label>
-          <input type="text" id="cf-name" name="name" placeholder="Ton nom" required />
+          <label for="cf-pseudo">PSEUDO DISCORD</label>
+          <input type="text" id="cf-pseudo" name="pseudo" placeholder="Ton pseudo Discord" required />
 
-          <label for="cf-subject">SUJET</label>
-          <input type="text" id="cf-subject" name="subject" placeholder="Sujet de ton message" required />
-
-          <label for="cf-message">MESSAGE</label>
-          <textarea id="cf-message" name="message" rows="4" placeholder="Ton message..." required></textarea>
+          <label for="cf-message">DEMANDE</label>
+          <textarea id="cf-message" name="message" rows="5" placeholder="Ta demande..." required></textarea>
 
           <button type="submit" class="main-btn">
             <i class="fa-solid fa-paper-plane"></i> ENVOYER
           </button>
+
+          <p id="contact-status" class="contact-status"></p>
         </form>
       </div>
     </section>
@@ -260,13 +145,9 @@
   <footer class="footer">
     <p>© <span id="year"></span> !ANAS — TOUS DROITS RÉSERVÉS</p>
     <div class="footer-socials">
-      <a href="https://github.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
-      <a href="https://discord.gg/MONLIEN" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord"></i></a>
-      <a href="https://x.com/TON_PSEUDO" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="https://discord.gg/tPEV8GdfSn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord"></i></a>
     </div>
   </footer>
-
-  <div id="toast" class="toast">LIEN COPIÉ</div>
 
   <script src="script.js"></script>
 </body>

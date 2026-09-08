@@ -8,24 +8,24 @@
 const CONFIG = {
   // Ton ID Discord (mode développeur activé > clic droit sur ton profil > Copier l'ID).
   // Nécessite aussi d'avoir rejoint le serveur Lanyard : https://discord.gg/lanyard
-  discordId: "TON_ID_DISCORD",
+  discordId: "664188939812208690",
 
   discordInvite: "https://discord.gg/MONLIEN",
 
   typewriterPhrases: [
     "EN TRAIN DE CODER...",
-    "DISPONIBLE",
+    "ME MP SI BESOIN",
     "DEVELOPPEUR",
-    "TOUJOURS EN APPRENTISSAGE",
+    "!Anas",
   ],
+
+  // Webhook Discord utilisé par le formulaire de contact
+  discordWebhook: "https://discord.com/api/webhooks/1546820995283820554/jJEGQ00cdfuVe-Jy_nITlRZP8MarP0GZTcZ059H-eqeFyYUMTjAEr9FB8OvFMJgKodaB",
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  initThemeToggle();
   initSoundToggle();
   initVisitorCounter();
-  initCopyDiscord();
-  initMusicPlayer();
   initParticles();
   initTypewriter();
   initDiscordStatus();
@@ -35,32 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =========================================================
-   1) TOGGLE D'INVERSION (noir sur blanc / blanc sur noir)
-   ========================================================= */
-function initThemeToggle() {
-  const btn = document.getElementById('invert-toggle');
-  const saved = localStorage.getItem('site-theme') || 'dark';
-
-  applyTheme(saved);
-
-  btn.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-    const next = current === 'light' ? 'dark' : 'light';
-    applyTheme(next);
-    localStorage.setItem('site-theme', next);
-  });
-
-  function applyTheme(theme) {
-    if (theme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-  }
-}
-
-/* =========================================================
-   2) GESTION DU SON (vidéo de fond + musique)
+   GESTION DU SON (vidéo de fond + musique)
    ========================================================= */
 function initSoundToggle() {
   const soundBtn = document.getElementById('sound-toggle');
@@ -68,24 +43,58 @@ function initSoundToggle() {
   const audio = document.getElementById('audio');
   const icon = soundBtn.querySelector('i');
 
-  let soundOn = false;
+  let soundOn = true;
 
-  soundBtn.addEventListener('click', () => {
+  function setIcon() {
+    icon.classList.toggle('fa-volume-xmark', !soundOn);
+    icon.classList.toggle('fa-volume-high', soundOn);
+  }
+
+  // Tentative de lancement du son dès l'ouverture du site.
+  // NB : la plupart des navigateurs bloquent l'autoplay avec son tant que
+  // l'utilisateur n'a pas encore interagi avec la page (clic, touche...).
+  // Si ça échoue, on repasse en "coupé" et le bouton relance le son normalement.
+  video.muted = false;
+  audio.volume = 0.5;
+  const playPromise = audio.play();
+  if (playPromise) {
+    playPromise.catch(() => {
+      soundOn = false;
+      video.muted = true;
+      setIcon();
+    });
+  }
+  setIcon();
+
+  // Filet de sécurité : les navigateurs bloquent le son tant qu'il n'y a pas
+  // eu d'interaction sur la page. On écoute donc la toute première interaction,
+  // peu importe sa nature, pour relancer le son automatiquement à ce moment-là.
+  function unlockOnFirstInteraction() {
+    if (!soundOn) return;
+    audio.play().catch(() => {});
+  }
+  const unlockEvents = ['pointerdown', 'keydown', 'touchstart', 'scroll'];
+  unlockEvents.forEach((evt) => {
+    document.addEventListener(evt, unlockOnFirstInteraction, { once: true, passive: true });
+  });
+
+  soundBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     soundOn = !soundOn;
     video.muted = !soundOn;
 
-    if (!soundOn) {
+    if (soundOn) {
+      audio.play().catch(() => {});
+    } else {
       audio.pause();
-      updatePlayIcon(false);
     }
 
-    icon.classList.toggle('fa-volume-xmark', !soundOn);
-    icon.classList.toggle('fa-volume-high', soundOn);
+    setIcon();
   });
 }
 
 /* =========================================================
-   3) COMPTEUR DE VISITEURS GLOBAL (CountAPI)
+   COMPTEUR DE VISITEURS GLOBAL (CountAPI)
    ========================================================= */
 async function initVisitorCounter() {
   const countEl = document.getElementById('visitor-count');
@@ -119,77 +128,7 @@ function animateCount(el, target) {
 }
 
 /* =========================================================
-   4) COPIER LE LIEN DISCORD
-   ========================================================= */
-function initCopyDiscord() {
-  const copyBtn = document.getElementById('copy-discord');
-  const toast = document.getElementById('toast');
-
-  copyBtn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(CONFIG.discordInvite);
-      showToast('LIEN DISCORD COPIÉ');
-      copyBtn.classList.add('copied');
-      const span = copyBtn.querySelector('span');
-      const originalText = span.textContent;
-      span.textContent = 'COPIÉ';
-
-      setTimeout(() => {
-        copyBtn.classList.remove('copied');
-        span.textContent = originalText;
-      }, 2000);
-    } catch (err) {
-      showToast('ÉCHEC DE LA COPIE');
-    }
-  });
-
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
-  }
-}
-
-/* =========================================================
-   5) LECTEUR DE MUSIQUE
-   ========================================================= */
-function initMusicPlayer() {
-  const audio = document.getElementById('audio');
-  const playBtn = document.getElementById('play-btn');
-  const progress = document.getElementById('progress');
-  const volume = document.getElementById('volume');
-
-  audio.volume = volume.value;
-
-  playBtn.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play().catch(() => {});
-      updatePlayIcon(true);
-    } else {
-      audio.pause();
-      updatePlayIcon(false);
-    }
-  });
-
-  audio.addEventListener('timeupdate', () => {
-    const percent = (audio.currentTime / audio.duration) * 100 || 0;
-    progress.style.width = `${percent}%`;
-  });
-
-  volume.addEventListener('input', () => {
-    audio.volume = volume.value;
-  });
-}
-
-function updatePlayIcon(isPlaying) {
-  const icon = document.querySelector('#play-btn i');
-  if (!icon) return;
-  icon.classList.toggle('fa-play', !isPlaying);
-  icon.classList.toggle('fa-pause', isPlaying);
-}
-
-/* =========================================================
-   6) PARTICULES (Canvas) — points blancs/noirs uniquement
+   PARTICULES (Canvas) — points blancs/noirs uniquement
    ========================================================= */
 function initParticles() {
   const canvas = document.getElementById('particles');
@@ -250,7 +189,7 @@ function initParticles() {
 }
 
 /* =========================================================
-   7) EFFET TYPEWRITER
+   EFFET TYPEWRITER
    ========================================================= */
 function initTypewriter() {
   const el = document.getElementById('typewriter');
@@ -290,7 +229,7 @@ function initTypewriter() {
 }
 
 /* =========================================================
-   8) STATUT DISCORD EN DIRECT (Lanyard API)
+   STATUT DISCORD EN DIRECT (Lanyard API)
    Représenté par la FORME de la bordure, jamais par une couleur :
    plein = en ligne / tirets = absent / double = ne pas déranger / fine = hors ligne
    ========================================================= */
@@ -354,13 +293,11 @@ function setStatusClass(el, status) {
 }
 
 /* =========================================================
-   9) NAVIGATION MULTI-PAGES
+   NAVIGATION MULTI-PAGES
    ========================================================= */
 function initPageNavigation() {
   const tabs = document.querySelectorAll('.nav-tab');
   const pages = document.querySelectorAll('.page');
-  const burgerBtn = document.getElementById('burger-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
 
   function goToPage(pageName) {
     pages.forEach((page) => {
@@ -369,19 +306,12 @@ function initPageNavigation() {
     tabs.forEach((tab) => {
       tab.classList.toggle('active', tab.dataset.page === pageName);
     });
-    mobileMenu.classList.remove('open');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => goToPage(tab.dataset.page));
   });
-
-  if (burgerBtn) {
-    burgerBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('open');
-    });
-  }
 
   const initialPage = window.location.hash.replace('#', '') || 'accueil';
   if (['accueil', 'projets', 'contact'].includes(initialPage)) {
@@ -390,20 +320,58 @@ function initPageNavigation() {
 }
 
 /* =========================================================
-   10) FORMULAIRE DE CONTACT (mailto, sans backend)
+   FORMULAIRE DE CONTACT (mailto, sans backend)
    ========================================================= */
 function initContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  const statusEl = document.getElementById('contact-status');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById('cf-name').value;
-    const subject = document.getElementById('cf-subject').value;
-    const message = document.getElementById('cf-message').value;
+    const pseudo = document.getElementById('cf-pseudo').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+    if (!pseudo || !message) return;
 
-    const mailto = `mailto:ton.email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`De : ${name}\n\n${message}`)}`;
-    window.location.href = mailto;
+    submitBtn.disabled = true;
+    setStatus('ENVOI EN COURS...', '');
+
+    try {
+      const res = await fetch(CONFIG.discordWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          embeds: [
+            {
+              title: 'Nouveau message — formulaire du site',
+              color: 0xffffff,
+              fields: [
+                { name: 'Pseudo Discord', value: pseudo.slice(0, 256) },
+                { name: 'Demande', value: message.slice(0, 1000) },
+              ],
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        }),
+      });
+
+      if (!res.ok) throw new Error('Réponse webhook invalide');
+
+      form.reset();
+      setStatus('MESSAGE ENVOYÉ ✓', 'success');
+    } catch (err) {
+      setStatus("ÉCHEC DE L'ENVOI, RÉESSAIE PLUS TARD", 'error');
+    } finally {
+      submitBtn.disabled = false;
+    }
   });
+
+  function setStatus(text, type) {
+    if (!statusEl) return;
+    statusEl.textContent = text;
+    statusEl.className = 'contact-status' + (type ? ` ${type}` : '');
+  }
 }

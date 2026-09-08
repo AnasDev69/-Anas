@@ -75,7 +75,7 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   transform: translate(-50%, -50%);
   object-fit: cover;
   z-index: -4;
-  filter: grayscale(1) contrast(1.15) blur(6px) brightness(0.45);
+  filter: grayscale(2) contrast(1.15) blur(0px) brightness(2);
 }
 
 /* Grille HUD subtile, animée en fond */
@@ -117,9 +117,9 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
    NAVBAR
    ========================================================= */
 .navbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   padding: 18px 32px;
   position: sticky;
@@ -152,12 +152,14 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
 }
 
 .nav-tabs {
+  grid-column: 2;
   display: flex;
   align-items: center;
   gap: 14px;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   letter-spacing: 1.5px;
+  white-space: nowrap;
 }
 
 .nav-sep {
@@ -195,36 +197,14 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   width: 100%;
 }
 
+/* Groupe de droite : bouton son, tout à droite */
 .nav-right {
+  grid-column: 3;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
 }
-
-.burger-btn { display: none; }
-
-.mobile-menu {
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 20px;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 0;
-  z-index: 49;
-  font-family: var(--font-mono);
-  letter-spacing: 1.5px;
-  font-size: 0.85rem;
-}
-
-[data-theme="light"] .mobile-menu {
-  background: rgba(255, 255, 255, 0.92);
-}
-
-.mobile-menu.open { display: flex; }
-.mobile-menu .nav-tab { text-align: left; width: 100%; }
 
 .icon-btn {
   width: 38px;
@@ -345,7 +325,7 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Avatar en cadre "réticule" HUD */
+/* Avatar */
 .avatar-wrapper {
   position: relative;
   width: 128px;
@@ -361,8 +341,8 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   height: 104px;
   border-radius: 50%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.1);
-  border: 1px solid var(--line-strong);
+  filter: contrast(1.1);
+  border: none;
   transition: var(--transition);
 }
 
@@ -371,36 +351,9 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   transform: scale(1.03);
 }
 
-.reticle {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border: 1px solid var(--text-main);
-  opacity: 0.8;
-  animation: reticlePulse 2.6s ease-in-out infinite;
-}
-
-.reticle-tl { top: 0; left: 0; border-right: none; border-bottom: none; }
-.reticle-tr { top: 0; right: 0; border-left: none; border-bottom: none; }
-.reticle-bl { bottom: 0; left: 0; border-right: none; border-top: none; }
-.reticle-br { bottom: 0; right: 0; border-left: none; border-top: none; }
-
-@keyframes reticlePulse {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 0.9; }
-}
-
 /* Statut : représenté par la forme de la bordure, pas une couleur */
 .status-dot {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--black);
-  border: 2px solid var(--text-muted);
-  transition: var(--transition);
+  display: none;
 }
 
 /* En ligne : plein */
@@ -551,45 +504,13 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   box-shadow: 0 0 24px var(--glow);
 }
 
-/* Bouton "ghost" — contour uniquement */
-.ghost-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 11px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  color: var(--text-main);
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  margin-bottom: 28px;
-  transition: var(--transition);
-}
-
-.ghost-btn:hover {
-  border-color: var(--text-main);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-[data-theme="light"] .ghost-btn:hover {
-  background: rgba(0, 0, 0, 0.06);
-}
-
-.ghost-btn.copied {
-  background: var(--text-main);
-  color: var(--black);
-  border-color: var(--text-main);
-}
-
 /* Réseaux sociaux — contour uniquement, inversion au survol */
 .socials {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 12px;
 }
 
 .social-icon {
@@ -610,151 +531,6 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   color: var(--black);
   transform: translateY(-4px);
 }
-
-/* Lecteur de musique */
-.music-player {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 16px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.play-btn {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  border-radius: 50%;
-  border: 1px solid var(--text-main);
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-.play-btn:hover {
-  background: var(--text-main);
-  color: var(--black);
-}
-
-.music-info { flex: 1; text-align: left; min-width: 0; }
-
-.track-title {
-  font-size: 0.7rem;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 2px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.progress {
-  height: 100%;
-  width: 0%;
-  background: var(--text-main);
-  transition: width 0.15s linear;
-}
-
-.volume-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-muted);
-}
-
-.volume-control input[type="range"] {
-  width: 56px;
-  accent-color: var(--text-main);
-}
-
-/* =========================================================
-   PAGE PROJETS
-   ========================================================= */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 18px;
-}
-
-.project-card {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 22px;
-  transition: var(--transition);
-  display: flex;
-  flex-direction: column;
-}
-
-.project-card:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 0 30px var(--glow);
-}
-
-.project-icon {
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--line-strong);
-  border-radius: 50%;
-  margin-bottom: 14px;
-  font-size: 1rem;
-}
-
-.project-card h3 {
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.project-card p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-  flex: 1;
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.tag {
-  font-size: 0.65rem;
-  letter-spacing: 1px;
-  padding: 4px 9px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  color: var(--text-muted);
-}
-
-.project-link {
-  font-size: 0.78rem;
-  letter-spacing: 1px;
-  font-weight: 700;
-  color: var(--text-main);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-.project-link:hover { gap: 10px; }
 
 /* =========================================================
    PAGE CONTACT
@@ -822,6 +598,17 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
   padding: 12px 26px;
 }
 
+.contact-status {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  min-height: 1.2em;
+}
+
+.contact-status.success { color: var(--text-main); }
+.contact-status.error { color: var(--text-muted); text-decoration: underline; }
+
 /* =========================================================
    FOOTER
    ========================================================= */
@@ -852,50 +639,24 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; bac
 .footer-socials a:hover { opacity: 0.5; transform: translateY(-2px); }
 
 /* =========================================================
-   TOAST
-   ========================================================= */
-.toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--text-main);
-  color: var(--black);
-  padding: 12px 22px;
-  border-radius: var(--radius);
-  font-size: 0.75rem;
-  letter-spacing: 1.5px;
-  font-weight: 700;
-  opacity: 0;
-  pointer-events: none;
-  transition: var(--transition);
-  z-index: 100;
-}
-
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width: 900px) {
-  .nav-tabs { display: none; }
-  .burger-btn { display: flex; }
-}
-
 @media (max-width: 768px) {
-  .navbar { padding: 14px 20px; }
+  .navbar { padding: 14px 16px; gap: 10px; }
+  .nav-tabs { gap: 8px; font-size: 0.7rem; }
   .profile-card, .page-card { padding: 34px 24px; }
   .username { font-size: 1.6rem; }
 }
 
 @media (max-width: 480px) {
+  .navbar { grid-template-columns: auto 1fr auto; }
   .logo-text { display: none; }
+  .nav-tabs { gap: 6px; font-size: 0.62rem; letter-spacing: 0.5px; }
+  .nav-sep { display: none; }
   .profile-card, .page-card { padding: 28px 18px; }
   .avatar-wrapper { width: 108px; height: 108px; }
   .avatar { width: 88px; height: 88px; }
   .username { font-size: 1.4rem; letter-spacing: 2px; }
   .social-icon { width: 40px; height: 40px; font-size: 0.95rem; }
-  .music-player { flex-wrap: wrap; }
-  .volume-control input[type="range"] { width: 48px; }
   .contact-options { flex-direction: column; }
 }
