@@ -6,159 +6,85 @@
   <title>!Anas</title>
   <link rel="icon" type="image/png" href="icon.png">
   <meta name="description" content="Page profil de !Anas — Developer basé à Lyon, France." />
+  <meta name="theme-color" content="#000000" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="intro-locked">
 
-  <!-- ============ ÉCRAN D'INTRO — CLICK TO ENTER ============ -->
+  <!-- ============ ÉCRAN D'INTRO ============ -->
   <div id="intro-screen">
-    <!-- Dépose ton gif ici (même dossier que index.html) puis décommente la ligne suivante -->
-    <img src="intro.png" alt="" class="intro-bg" /> 
-
-    <div class="intro-glow"></div>
-
+    <img src="intro.png" alt="" class="intro-bg" />
     <div class="intro-content">
-      <h1 class="intro-title">!ANAS</h1>
-      <p class="intro-enter">CLICK TO ENTER</p>
+      <h1 class="intro-title">!anas</h1>
+      <p class="intro-enter">click to enter</p>
     </div>
   </div>
 
-  <!-- ============ FOND VIDEO + GRILLE + PARTICULES ============ -->
+  <!-- ============ FOND ============ -->
   <video id="bg-video" autoplay muted loop playsinline>
     <source src="background.mp4" type="video/mp4" />
   </video>
-  <canvas id="particles"></canvas>
   <div class="overlay"></div>
 
-  <!-- ============ NAVBAR ============ -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <span class="bracket">[</span>
-      <span class="logo-text">!ANAS_DEV</span>
-      <span class="bracket">]</span>
-    </div>
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <span class="logo">!anas</span>
+    <button id="sound-toggle" class="icon-btn" title="Activer / couper le son" aria-label="Activer / couper le son">
+      <i class="fa-solid fa-volume-high"></i>
+    </button>
+  </header>
 
-    <div class="nav-tabs" role="tablist">
-      <button class="nav-tab active" data-page="accueil">ACCUEIL</button>
-      <span class="nav-sep">/</span>
-      <button class="nav-tab" data-page="contact">CONTACT</button>
-    </div>
+  <!-- ============ PROFIL ============ -->
+  <main class="main">
+    <section class="profile">
 
-    <div class="nav-right">
-      <button id="sound-toggle" class="icon-btn" title="Activer / couper le son">
-        <i class="fa-solid fa-volume-high"></i>
-      </button>
-    </div>
-  </nav>
+      <div class="avatar-wrapper">
+        <img src="avatar.jpg" alt="Avatar de !Anas" class="avatar" />
+        <span class="status-dot" id="status-dot"></span>
+      </div>
 
-  <!-- ============ CONTENU PRINCIPAL ============ -->
-  <main class="main-content">
+      <h1 class="username">!Anas</h1>
 
-    <!-- ===================== PAGE ACCUEIL ===================== -->
-    <section class="page active" id="page-accueil">
-      <div class="profile-card fade-in">
+      <p class="typewriter-line">
+        <span id="typewriter"></span><span class="cursor"></span>
+      </p>
 
-        <span class="corner corner-tl"></span>
-        <span class="corner corner-tr"></span>
-        <span class="corner corner-bl"></span>
-        <span class="corner corner-br"></span>
+      <ul class="meta">
+        <li><i class="fa-solid fa-location-dot"></i> Lyon, France</li>
+        <li class="meta-sep" aria-hidden="true"></li>
+        <li><span class="live-dot" id="discord-status-dot"></span><span id="discord-status-text">Chargement…</span></li>
+      </ul>
 
-        <!-- Avatar -->
-        <div class="avatar-wrapper">
-          <img src="avatar.jpg" alt="Avatar de !Anas" class="avatar" />
-          <span class="status-dot" id="status-dot"></span>
-        </div>
-
-        <!-- Nom + badge -->
-        <div class="identity">
-          <h1 class="username" data-text="!ANAS">!ANAS</h1>
-          <span class="badge">DEV</span>
-        </div>
-
-        <p class="typewriter-line">
-          <span class="prompt">&gt;</span>
-          <span id="typewriter"></span><span class="cursor">_</span>
-        </p>
-
-        <p class="location">
-          <i class="fa-solid fa-location-dot"></i> LYON, FRANCE
-        </p>
-
-        <div class="discord-live-status" id="discord-live-status">
-          <span class="live-dot" id="discord-status-dot"></span>
-          <span id="discord-status-text">CHARGEMENT DU STATUT...</span>
-        </div>
-
-        <div class="visitor-counter">
-          <i class="fa-solid fa-eye"></i>
-          <span>VISITEURS : <strong id="visitor-count">0</strong></span>
-        </div>
-
+      <div class="links">
         <a href="https://discord.gg/tPEV8GdfSn" target="_blank" rel="noopener noreferrer" class="main-btn">
           <i class="fa-brands fa-discord"></i>
-          REJOINDRE LE DISCORD
+          Rejoindre le Discord
         </a>
 
         <div class="socials">
-          <a href="https://discord.com/users/664188939812208690" target="_blank" rel="noopener noreferrer" class="social-icon" title="Mon profil Discord">
+          <a href="https://discord.com/users/664188939812208690" target="_blank" rel="noopener noreferrer" class="social-icon" title="Profil Discord" aria-label="Profil Discord">
             <i class="fa-brands fa-discord"></i>
           </a>
-          <a href="https://github.com/AnasDev69" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub">
+          <a href="https://github.com/AnasDev69" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub" aria-label="GitHub">
             <i class="fa-brands fa-github"></i>
           </a>
         </div>
-
-        <audio id="audio" src="music.mp3" loop preload="metadata"></audio>
-
       </div>
+
+      <audio id="audio" src="music.mp3" loop preload="metadata"></audio>
+
     </section>
-
-    <!-- ===================== PAGE CONTACT ===================== -->
-    <section class="page" id="page-contact">
-      <div class="page-card fade-in">
-        <span class="corner corner-tl"></span>
-        <span class="corner corner-tr"></span>
-        <span class="corner corner-bl"></span>
-        <span class="corner corner-br"></span>
-
-        <h2 class="page-title">// CONTACT</h2>
-        <p class="page-subtitle">Le plus rapide reste Discord, mais tu peux aussi m'écrire directement via le formulaire.</p>
-
-        <div class="contact-options">
-          <a href="https://discord.gg/tPEV8GdfSn" target="_blank" rel="noopener noreferrer" class="contact-btn">
-            <i class="fa-brands fa-discord"></i> REJOINDRE LE DISCORD
-          </a>
-        </div>
-
-        <form id="contact-form" class="contact-form">
-          <label for="cf-pseudo">PSEUDO DISCORD</label>
-          <input type="text" id="cf-pseudo" name="pseudo" placeholder="Ton pseudo Discord" required />
-
-          <label for="cf-message">DEMANDE</label>
-          <textarea id="cf-message" name="message" rows="5" placeholder="Ta demande..." required></textarea>
-
-          <button type="submit" class="main-btn">
-            <i class="fa-solid fa-paper-plane"></i> ENVOYER
-          </button>
-
-          <p id="contact-status" class="contact-status"></p>
-        </form>
-      </div>
-    </section>
-
   </main>
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
-    <p>© <span id="year"></span> !ANAS — TOUS DROITS RÉSERVÉS</p>
-    <div class="footer-socials">
-      <a href="https://discord.gg/tPEV8GdfSn" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-discord"></i></a>
-    </div>
+    <p>© <span id="year"></span> !Anas</p>
   </footer>
 
   <script src="script.js"></script>
